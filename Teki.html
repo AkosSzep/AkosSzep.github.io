@@ -3,33 +3,28 @@
 <head>
   <meta charset="utf-8">
   <title>Teki Chatbot</title>
-  <style>
-    body { font-family: sans-serif; text-align: center; margin-top: 100px; }
-    #teki { width: 200px; animation: float 4s ease-in-out infinite; }
-    @keyframes float {
-      0% { transform: translateY(0); }
-      50% { transform: translateY(-10px); }
-      100% { transform: translateY(0); }
-    }
-  </style>
 </head>
 <body>
-  <img src="teki.png" id="teki" alt="Teki">
   <h2>Kérdezz valamit Tekitől!</h2>
-  <input id="userInput" placeholder="Pl: Mire jó a D-vitamin?" />
-  <button onclick="sendMessage()">Küldés</button>
-  <p id="response"></p>
+  <input id="userInput" type="text" placeholder="Pl: Mire jó a D-vitamin?" />
+  <button id="sendBtn">Küldés</button>
+  <p id="response">Válasz érkezik ide...</p>
 
   <script>
+    document.getElementById("sendBtn").addEventListener("click", sendMessage);
+
     async function sendMessage() {
-      const question = document.getElementById('userInput').value;
-      const res = await fetch("https://hook.make.com/https://hook.eu2.make.com/crv68yqy16fh454e6goym01xrvr7sq3q", {
+      const question = document.getElementById("userInput").value;
+      const res = await fetch("https://hook.eu2.make.com/crv68yqy16fh454e6goym01xrvr7sq3q", {
         method: "POST",
-        body: JSON.stringify({ question }),
-        headers: { "Content-Type": "application/json" }
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ question: question })
       });
+
       const data = await res.json();
-      document.getElementById('response').innerText = data.answer;
+      document.getElementById("response").innerText = data.answer;
     }
   </script>
 </body>
