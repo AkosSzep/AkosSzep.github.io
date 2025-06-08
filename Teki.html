@@ -27,7 +27,7 @@
       width: calc(100% - 90px);
       padding: 8px;
       border-radius: 12px;
-      border: 1px solid #ccc;
+      border: 2px solid #6cc27a;
       font-size: 14px;
     }
 
@@ -88,7 +88,7 @@
       color: #d8ffd8;
     }
 
-    body.dark input, 
+    body.dark input,
     body.dark button {
       background-color: #2a2a2a;
       color: #f0f0f0;
@@ -110,7 +110,7 @@
   <button id="themeToggle">🌙 Sötét mód</button>
 
   <script>
-    // Enterrel küldés
+    // Enterrel is működjön
     document.getElementById("sendBtn").addEventListener("click", sendMessage);
     document.getElementById("userInput").addEventListener("keydown", function (e) {
       if (e.key === "Enter") {
@@ -118,7 +118,15 @@
       }
     });
 
-    // Kérdésküldés logika
+    // Váltás sötét/világos mód között
+    document.getElementById("themeToggle").addEventListener("click", function () {
+      document.body.classList.toggle("dark");
+      this.innerText = document.body.classList.contains("dark")
+        ? "☀️ Világos mód"
+        : "🌙 Sötét mód";
+    });
+
+    // Kérdésküldő függvény
     async function sendMessage() {
       const input = document.getElementById("userInput");
       const sendBtn = document.getElementById("sendBtn");
@@ -140,19 +148,12 @@
       const data = await res.json();
       document.getElementById("response").innerText = data.answer;
 
+      // Mezők visszaállítása
       input.value = "";
       input.placeholder = "Pl: Mire jó a D-vitamin?";
       sendBtn.disabled = false;
       sendBtn.innerText = "Küldés";
     }
-
-    // Sötét/világos mód váltás
-    document.getElementById("themeToggle").addEventListener("click", function () {
-      document.body.classList.toggle("dark");
-      this.innerText = document.body.classList.contains("dark") 
-        ? "☀️ Világos mód" 
-        : "🌙 Sötét mód";
-    });
   </script>
 </body>
 </html>
