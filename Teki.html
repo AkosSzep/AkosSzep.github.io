@@ -16,12 +16,12 @@
     async function sendMessage() {
       const question = document.getElementById("userInput").value;
       const res = await fetch("https://hook.eu2.make.com/crv68yqy16fh454e6goym01xrvr7sq3q", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({ question: question })
-      });
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json"
+  },
+  body: JSON.stringify({ question: question })
+});
 
       const data = await res.json();
       document.getElementById("response").innerText = data.answer;
