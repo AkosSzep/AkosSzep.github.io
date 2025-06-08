@@ -3,8 +3,38 @@
 <head>
   <meta charset="utf-8">
   <title>Teki Chatbot</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 20px;
+    }
+
+    h2 {
+      margin-top: 0;
+    }
+
+    #teki-img {
+      width: 100px;
+      animation: float 3s ease-in-out infinite, wave 2s infinite alternate;
+      display: block;
+      margin: 0 auto 10px auto;
+    }
+
+    @keyframes float {
+      0%   { transform: translateY(0px); }
+      50%  { transform: translateY(-10px); }
+      100% { transform: translateY(0px); }
+    }
+
+    @keyframes wave {
+      0%   { transform: rotate(0deg); }
+      100% { transform: rotate(5deg); }
+    }
+  </style>
 </head>
 <body>
+  <img id="teki-img" src="https://akosszep.github.io/Teki.png" alt="Teki" style="width: 100px; display: block; margin: 0 auto;" />
   <h2>Kérdezz valamit Tekitől!</h2>
   <input id="userInput" type="text" placeholder="Pl: Mire jó a D-vitamin?" />
   <button id="sendBtn">Küldés</button>
@@ -15,29 +45,16 @@
 
     async function sendMessage() {
       const question = document.getElementById("userInput").value;
-      try {
-        const res = await fetch("https://hook.eu2.make.com/crv68yqy16fh454e6goym01xrvr7sq3q", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify({ question: question })
-        });
+      const res = await fetch("https://hook.eu2.make.com/crv68yqy16fh454e6goym01xrvr7sq3q", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ question: question })
+      });
 
-        // Ellenőrizzük, hogy a válasz tényleg JSON-e
-        const contentType = res.headers.get("content-type");
-        if (contentType && contentType.includes("application/json")) {
-          const data = await res.json();
-          document.getElementById("response").innerText = data.answer;
-        } else {
-          document.getElementById("response").innerText = "A válasz nem JSON formátumú.";
-          console.warn("Nem JSON válasz:", await res.text());
-        }
-
-      } catch (error) {
-        document.getElementById("response").innerText = "Hiba történt a kérdés küldésekor.";
-        console.error("Hiba:", error);
-      }
+      const data = await res.json();
+      document.getElementById("response").innerText = data.answer;
     }
   </script>
 </body>
