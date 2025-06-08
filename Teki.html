@@ -55,6 +55,17 @@
       min-height: 50px;
     }
 
+    #themeToggle {
+      margin-top: 15px;
+      padding: 6px 12px;
+      border-radius: 12px;
+      border: none;
+      background-color: #ddd;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    /* Animáció */
     @keyframes float {
       0%   { transform: translateY(0px); }
       50%  { transform: translateY(-10px); }
@@ -65,6 +76,29 @@
       0%   { transform: rotate(0deg); }
       100% { transform: rotate(5deg); }
     }
+
+    /* 🌙 DARK MODE */
+    body.dark {
+      background-color: #1e1e1e;
+      color: #f0f0f0;
+    }
+
+    body.dark #response {
+      background-color: #333333;
+      color: #d8ffd8;
+    }
+
+    body.dark input, 
+    body.dark button {
+      background-color: #2a2a2a;
+      color: #f0f0f0;
+      border: 1px solid #555;
+    }
+
+    body.dark #themeToggle {
+      background-color: #444;
+      color: white;
+    }
   </style>
 </head>
 <body>
@@ -73,8 +107,10 @@
   <input id="userInput" type="text" placeholder="Pl: Mire jó a D-vitamin?" />
   <button id="sendBtn">Küldés</button>
   <p id="response">Válasz érkezik ide...</p>
+  <button id="themeToggle">🌙 Sötét mód</button>
 
   <script>
+    // Enterrel küldés
     document.getElementById("sendBtn").addEventListener("click", sendMessage);
     document.getElementById("userInput").addEventListener("keydown", function (e) {
       if (e.key === "Enter") {
@@ -82,8 +118,17 @@
       }
     });
 
+    // Kérdésküldés logika
     async function sendMessage() {
-      const question = document.getElementById("userInput").value;
+      const input = document.getElementById("userInput");
+      const sendBtn = document.getElementById("sendBtn");
+      const question = input.value;
+
+      if (!question.trim()) return;
+
+      sendBtn.disabled = true;
+      sendBtn.innerText = "Küldés...";
+
       const res = await fetch("https://hook.eu2.make.com/crv68yqy16fh454e6goym01xrvr7sq3q", {
         method: "POST",
         headers: {
@@ -94,7 +139,20 @@
 
       const data = await res.json();
       document.getElementById("response").innerText = data.answer;
+
+      input.value = "";
+      input.placeholder = "Pl: Mire jó a D-vitamin?";
+      sendBtn.disabled = false;
+      sendBtn.innerText = "Küldés";
     }
+
+    // Sötét/világos mód váltás
+    document.getElementById("themeToggle").addEventListener("click", function () {
+      document.body.classList.toggle("dark");
+      this.innerText = document.body.classList.contains("dark") 
+        ? "☀️ Világos mód" 
+        : "🌙 Sötét mód";
+    });
   </script>
 </body>
 </html>
