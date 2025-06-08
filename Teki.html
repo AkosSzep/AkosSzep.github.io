@@ -15,16 +15,29 @@
 
     async function sendMessage() {
       const question = document.getElementById("userInput").value;
-      const res = await fetch("https://hook.eu2.make.com/crv68yqy16fh454e6goym01xrvr7sq3q", {
-  method: "POST",
-  headers: {
-    "Content-Type": "application/json"
-  },
-  body: JSON.stringify({ question: question })
-});
+      try {
+        const res = await fetch("https://hook.eu2.make.com/crv68yqy16fh454e6goym01xrvr7sq3q", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({ question: question })
+        });
 
-      const data = await res.json();
-      document.getElementById("response").innerText = data.answer;
+        // Ellenőrizzük, hogy a válasz tényleg JSON-e
+        const contentType = res.headers.get("content-type");
+        if (contentType && contentType.includes("application/json")) {
+          const data = await res.json();
+          document.getElementById("response").innerText = data.answer;
+        } else {
+          document.getElementById("response").innerText = "A válasz nem JSON formátumú.";
+          console.warn("Nem JSON válasz:", await res.text());
+        }
+
+      } catch (error) {
+        document.getElementById("response").innerText = "Hiba történt a kérdés küldésekor.";
+        console.error("Hiba:", error);
+      }
     }
   </script>
 </body>
