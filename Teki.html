@@ -5,40 +5,54 @@
   <title>Teki Chatbot</title>
 </head>
 <body>
-  <h2>Kérdezz valamit Tekitől!</h2>
-  <input id="userInput" type="text" placeholder="Pl: Mire jó a D-vitamin?" />
-  <button id="sendBtn">Küldés</button>
-  <p id="response">Válasz érkezik ide...</p>
+  <div id="teki-container">
+    <img src="teki.png" id="teki" alt="Teki, az AI asszisztens teknős" />
+    <div id="chatbox">
+      <h2>Kérdezz valamit Tekitől!</h2>
+      <input id="userInput" type="text" placeholder="Pl: Mire jó a D-vitamin?" />
+      <button id="sendBtn">Küldés</button>
+      <p id="response">Válasz érkezik ide...</p>
+    </div>
+  </div>
 
-  <script>
-    document.getElementById("sendBtn").addEventListener("click", sendMessage);
-
-    async function sendMessage() {
-      const question = document.getElementById("userInput").value;
-      try {
-        const res = await fetch("https://hook.eu2.make.com/crv68yqy16fh454e6goym01xrvr7sq3q", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify({ question: question })
-        });
-
-        // Ellenőrizzük, hogy a válasz tényleg JSON-e
-        const contentType = res.headers.get("content-type");
-        if (contentType && contentType.includes("application/json")) {
-          const data = await res.json();
-          document.getElementById("response").innerText = data.answer;
-        } else {
-          document.getElementById("response").innerText = "A válasz nem JSON formátumú.";
-          console.warn("Nem JSON válasz:", await res.text());
-        }
-
-      } catch (error) {
-        document.getElementById("response").innerText = "Hiba történt a kérdés küldésekor.";
-        console.error("Hiba:", error);
-      }
+  <style>
+    #teki-container {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      width: 300px;
+      z-index: 9999;
     }
-  </script>
+
+    #teki {
+      width: 120px;
+      animation: float 3s ease-in-out infinite, wave 2s infinite ease-in-out;
+    }
+
+    @keyframes float {
+      0% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+      100% { transform: translateY(0); }
+    }
+
+    @keyframes wave {
+      0% { transform: rotate(0deg); }
+      50% { transform: rotate(5deg); }
+      100% { transform: rotate(0deg); }
+    }
+
+    #chatbox {
+      background: white;
+      border-radius: 12px;
+      padding: 10px;
+      margin-top: 10px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+    }
+
+    input, button {
+      margin-top: 5px;
+      font-size: 14px;
+    }
+  </style>
 </body>
 </html>
