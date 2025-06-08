@@ -5,9 +5,10 @@
   <title>Teki Chatbot</title>
   <style>
     body {
-      font-family: Arial, sans-serif;
-      margin: 0;
+      font-family: 'Comic Sans MS', cursive, sans-serif;
+      background-color: #f4fff7;
       padding: 20px;
+      color: #2c3e50;
     }
 
     h2 {
@@ -20,6 +21,38 @@
       animation: float 3s ease-in-out infinite, wave 2s infinite alternate;
       display: block;
       margin: 0 auto 10px auto;
+    }
+
+    #userInput {
+      width: calc(100% - 90px);
+      padding: 8px;
+      border-radius: 12px;
+      border: 1px solid #ccc;
+      font-size: 14px;
+    }
+
+    #sendBtn {
+      padding: 8px 12px;
+      background-color: #6cc27a;
+      border: none;
+      color: white;
+      border-radius: 12px;
+      font-weight: bold;
+      cursor: pointer;
+      margin-left: 8px;
+    }
+
+    #sendBtn:hover {
+      background-color: #57a765;
+    }
+
+    #response {
+      margin-top: 15px;
+      background-color: #e6ffe9;
+      padding: 12px;
+      border-radius: 12px;
+      font-style: italic;
+      min-height: 50px;
     }
 
     @keyframes float {
@@ -43,6 +76,11 @@
 
   <script>
     document.getElementById("sendBtn").addEventListener("click", sendMessage);
+    document.getElementById("userInput").addEventListener("keydown", function (e) {
+      if (e.key === "Enter") {
+        sendMessage();
+      }
+    });
 
     async function sendMessage() {
       const question = document.getElementById("userInput").value;
