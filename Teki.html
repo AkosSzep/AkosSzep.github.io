@@ -3,59 +3,59 @@
 <head>
   <meta charset="utf-8">
   <title>Teki Chatbot</title>
-</head>
-<body>
-  <div id="teki-container">
-    <img 
-  src="https://akosszep.github.io/Teki.png" 
-  alt="Teki"
-  style="width: 100px; animation: float 3s ease-in-out infinite, wave 2s infinite alternate;" />
-    <div id="chatbox">
-      <h2>Kérdezz valamit Tekitől!</h2>
-      <input id="userInput" type="text" placeholder="Pl: Mire jó a D-vitamin?" />
-      <button id="sendBtn">Küldés</button>
-      <p id="response">Válasz érkezik ide...</p>
-    </div>
-  </div>
-
   <style>
-    #teki-container {
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
-      width: 300px;
-      z-index: 9999;
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 20px;
     }
 
-    #teki {
-      width: 120px;
-      animation: float 3s ease-in-out infinite, wave 2s infinite ease-in-out;
+    h2 {
+      margin-top: 0;
+    }
+
+    #teki-img {
+      width: 100px;
+      animation: float 3s ease-in-out infinite, wave 2s infinite alternate;
+      display: block;
+      margin: 0 auto 10px auto;
     }
 
     @keyframes float {
-      0% { transform: translateY(0); }
-      50% { transform: translateY(-10px); }
-      100% { transform: translateY(0); }
+      0%   { transform: translateY(0px); }
+      50%  { transform: translateY(-10px); }
+      100% { transform: translateY(0px); }
     }
 
     @keyframes wave {
-      0% { transform: rotate(0deg); }
-      50% { transform: rotate(5deg); }
-      100% { transform: rotate(0deg); }
-    }
-
-    #chatbox {
-      background: white;
-      border-radius: 12px;
-      padding: 10px;
-      margin-top: 10px;
-      box-shadow: 0 4px 16px rgba(0,0,0,0.2);
-    }
-
-    input, button {
-      margin-top: 5px;
-      font-size: 14px;
+      0%   { transform: rotate(0deg); }
+      100% { transform: rotate(5deg); }
     }
   </style>
+</head>
+<body>
+  <img id="teki-img" src="https://akosszep.github.io/Teki.png" alt="Teki" />
+  <h2>Kérdezz valamit Tekitől!</h2>
+  <input id="userInput" type="text" placeholder="Pl: Mire jó a D-vitamin?" />
+  <button id="sendBtn">Küldés</button>
+  <p id="response">Válasz érkezik ide...</p>
+
+  <script>
+    document.getElementById("sendBtn").addEventListener("click", sendMessage);
+
+    async function sendMessage() {
+      const question = document.getElementById("userInput").value;
+      const res = await fetch("https://hook.eu2.make.com/crv68yqy16fh454e6goym01xrvr7sq3q", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ question: question })
+      });
+
+      const data = await res.json();
+      document.getElementById("response").innerText = data.answer;
+    }
+  </script>
 </body>
 </html>
