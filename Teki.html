@@ -5,13 +5,15 @@
   <title>Teki Chatbot</title>
   <style>
     body {
-      font-family: Arial, sans-serif;
-      margin: 0;
+      font-family: 'Comic Sans MS', cursive, sans-serif;
+      background-color: #f4fff7;
       padding: 20px;
+      color: #2c3e50;
     }
 
     h2 {
-      margin-top: 0;
+      margin-top: 10px;
+      text-align: center;
     }
 
     #teki-img {
@@ -21,6 +23,49 @@
       margin: 0 auto 10px auto;
     }
 
+    #userInput {
+      width: calc(100% - 90px);
+      padding: 8px;
+      border-radius: 12px;
+      border: 2px solid #6cc27a;
+      font-size: 14px;
+    }
+
+    #sendBtn {
+      padding: 8px 12px;
+      background-color: #6cc27a;
+      border: none;
+      color: white;
+      border-radius: 12px;
+      font-weight: bold;
+      cursor: pointer;
+      margin-left: 8px;
+    }
+
+    #sendBtn:hover {
+      background-color: #57a765;
+    }
+
+    #response {
+      margin-top: 15px;
+      background-color: #e6ffe9;
+      padding: 12px;
+      border-radius: 12px;
+      font-style: italic;
+      min-height: 50px;
+    }
+
+    #themeToggle {
+      margin-top: 15px;
+      padding: 6px 12px;
+      border-radius: 12px;
+      border: none;
+      background-color: #ddd;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    /* Animáció */
     @keyframes float {
       0%   { transform: translateY(0px); }
       50%  { transform: translateY(-10px); }
@@ -31,20 +76,67 @@
       0%   { transform: rotate(0deg); }
       100% { transform: rotate(5deg); }
     }
+
+    /* 🌙 DARK MODE */
+    body.dark {
+      background-color: #1e1e1e;
+      color: #f0f0f0;
+    }
+
+    body.dark #response {
+      background-color: #333333;
+      color: #d8ffd8;
+    }
+
+    body.dark input,
+    body.dark button {
+      background-color: #2a2a2a;
+      color: #f0f0f0;
+      border: 1px solid #555;
+    }
+
+    body.dark #themeToggle {
+      background-color: #444;
+      color: white;
+    }
   </style>
 </head>
 <body>
-  <img id="teki-img" src="https://akosszep.github.io/Teki.png" alt="Teki" style="width: 100px; display: block; margin: 0 auto;" />
+  <img id="teki-img" src="https://akosszep.github.io/Teki2.png" alt="Teki" />
   <h2>Kérdezz valamit Tekitől!</h2>
   <input id="userInput" type="text" placeholder="Pl: Mire jó a D-vitamin?" />
   <button id="sendBtn">Küldés</button>
   <p id="response">Válasz érkezik ide...</p>
+  <button id="themeToggle">🌙 Sötét mód</button>
 
   <script>
+    // Enterrel is működjön
     document.getElementById("sendBtn").addEventListener("click", sendMessage);
+    document.getElementById("userInput").addEventListener("keydown", function (e) {
+      if (e.key === "Enter") {
+        sendMessage();
+      }
+    });
 
+    // Váltás sötét/világos mód között
+    document.getElementById("themeToggle").addEventListener("click", function () {
+      document.body.classList.toggle("dark");
+      this.innerText = document.body.classList.contains("dark")
+        ? "☀️ Világos mód"
+        : "🌙 Sötét mód";
+    });
+
+    // Kérdésküldő függvény
     async function sendMessage() {
-      const question = document.getElementById("userInput").value;
+      const input = document.getElementById("userInput");
+      const sendBtn = document.getElementById("sendBtn");
+      const question = input.value;
+
+      if (!question.trim()) return;
+
+      sendBtn.disabled = true;
+      sendBtn.innerText = "Küldés...";
+
       const res = await fetch("https://hook.eu2.make.com/crv68yqy16fh454e6goym01xrvr7sq3q", {
         method: "POST",
         headers: {
@@ -55,6 +147,12 @@
 
       const data = await res.json();
       document.getElementById("response").innerText = data.answer;
+
+      // Mezők visszaállítása
+      input.value = "";
+      input.placeholder = "Pl: Mire jó a D-vitamin?";
+      sendBtn.disabled = false;
+      sendBtn.innerText = "Küldés";
     }
   </script>
 </body>
