@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="hu">
 <head>
@@ -19,6 +18,7 @@
       padding: 10px 12px;
       box-sizing: border-box;
       z-index: 9999;
+      display: none; /* kezdetben rejtve */
     }
     .bar-text {
       text-align: center;
@@ -42,7 +42,7 @@
   </style>
 </head>
 <body>
-  <div class="bar-container">
+  <div class="bar-container" id="bar-container">
     <div class="bar-text" id="bar-text">Kosár betöltése...</div>
     <div class="bar-bg">
       <div class="bar-fill" id="bar-fill"></div>
@@ -56,6 +56,7 @@
       if (!event.data || typeof event.data !== "object") return;
       const total = event.data.cartTotal;
 
+      const container = document.getElementById("bar-container");
       const barText = document.getElementById("bar-text");
       const barFill = document.getElementById("bar-fill");
 
@@ -69,9 +70,10 @@
           const remain = FREE_SHIPPING_LIMIT - total;
           barText.textContent = "Még " + remain.toLocaleString("hu-HU") + " Ft, és ingyenes lesz a szállítás!";
         }
+
+        container.style.display = "block";
       } else {
-        barFill.style.width = "0%";
-        barText.textContent = "Kosarad üres.";
+        container.style.display = "none"; // rejtés, ha nincs termék
       }
     }, false);
   </script>
