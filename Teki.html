@@ -6,16 +6,18 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
     body {
-      font-family: 'Comic Sans MS', cursive, sans-serif;
+      font-family: 'Segoe UI', sans-serif;
       background-color: #f4fff7;
       padding: 20px;
-      color: #2c3e50;
+      color: #1f1f1f;
       margin: 0;
     }
 
     h2 {
       margin-top: 10px;
       text-align: center;
+      font-size: 20px;
+      font-weight: 600;
     }
 
     #teki-img {
@@ -27,21 +29,22 @@
 
     #userInput {
       width: calc(100% - 90px);
-      padding: 8px;
-      border-radius: 12px;
+      padding: 10px;
+      border-radius: 10px;
       border: 2px solid #6cc27a;
-      font-size: 14px;
+      font-size: 16px;
     }
 
     #sendBtn {
-      padding: 8px 12px;
+      padding: 10px 16px;
       background-color: #6cc27a;
       border: none;
       color: white;
-      border-radius: 12px;
+      border-radius: 10px;
       font-weight: bold;
       cursor: pointer;
       margin-left: 8px;
+      font-size: 16px;
     }
 
     #sendBtn:hover {
@@ -49,22 +52,24 @@
     }
 
     #response {
-      margin-top: 15px;
+      margin-top: 20px;
       background-color: #e6ffe9;
-      padding: 12px;
-      border-radius: 12px;
-      font-style: italic;
-      min-height: 50px;
+      padding: 14px;
+      border-radius: 10px;
+      font-size: 15px;
+      font-style: normal;
+      line-height: 1.5;
     }
 
     #themeToggle {
-      margin-top: 15px;
-      padding: 6px 12px;
-      border-radius: 12px;
+      margin-top: 20px;
+      padding: 8px 14px;
+      border-radius: 10px;
       border: none;
       background-color: #ddd;
       cursor: pointer;
       font-weight: bold;
+      font-size: 14px;
     }
 
     body.dark {
@@ -73,7 +78,7 @@
     }
 
     body.dark #response {
-      background-color: #333333;
+      background-color: #2e2e2e;
       color: #d8ffd8;
     }
 
@@ -93,8 +98,10 @@
 <body>
   <img id="teki-img" src="https://akosszep.github.io/Teki2.png" alt="Teki" />
   <h2>Kérdezz valamit Tekitől!</h2>
-  <input id="userInput" type="text" placeholder="Pl: Mire jó a D-vitamin?" />
-  <button id="sendBtn">Küldés</button>
+  <div style="display: flex; align-items: center;">
+    <input id="userInput" type="text" placeholder="Pl: Mire jó a D-vitamin?" />
+    <button id="sendBtn">Küldés</button>
+  </div>
   <p id="response">Válasz érkezik ide...</p>
   <button id="themeToggle">🌙 Sötét mód</button>
 
