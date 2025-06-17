@@ -18,11 +18,11 @@
       padding: 10px 12px;
       box-sizing: border-box;
       z-index: 9999;
-      display: none; /* kezdetben rejtve */
+      display: none;
     }
     .bar-text {
       text-align: center;
-      font-size: 20px;
+      font-size: 20px !important;
       color: #333;
       margin-bottom: 6px;
     }
@@ -73,7 +73,7 @@
 
         container.style.display = "block";
       } else {
-        container.style.display = "none"; // rejtés, ha nincs termék
+        container.style.display = "none";
       }
     }, false);
   </script>
