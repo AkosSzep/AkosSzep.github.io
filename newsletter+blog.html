@@ -2,73 +2,67 @@
 <html lang="hu">
 <head>
   <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Biobolt hírlevél + blog generátor</title>
   <style>
-    body {
-      font: 16px/1.5 system-ui, sans-serif;
-      max-width: 800px;
-      margin: 40px auto;
-      padding: 0 16px;
-      background: #f9f9f9;
-    }
-    h1 {
-      color: #2c3e50;
-    }
-    label {
-      display:block;
-      margin-top:14px;
-      font-weight:600;
-    }
-    input, textarea, select {
-      width:100%;
-      padding:10px;
-      border:1px solid #ccc;
-      border-radius:6px;
-      margin-top:4px;
-    }
-    textarea { min-height:100px; }
-    button {
-      margin-top:20px;
-      padding:12px 20px;
-      border:0;
-      border-radius:6px;
-      background:#28a745;
-      color:white;
-      font-size:16px;
-      cursor:pointer;
-    }
-    button:hover { background:#218838; }
+    body { font: 16px/1.5 system-ui, sans-serif; max-width: 820px; margin: 40px auto; padding: 0 16px; background:#fafafa; }
+    h1 { margin-bottom: 10px; }
+    p.hint { color:#555; margin-top:0; }
+    label { display:block; margin-top:14px; font-weight:600; }
+    input, textarea, select { width:100%; padding:10px; border:1px solid #ccc; border-radius:8px; margin-top:6px; background:#fff; }
+    textarea { min-height:110px; }
+    .row { display:grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    button { margin-top:20px; padding:12px 18px; border:0; border-radius:10px; cursor:pointer; background:#2f855a; color:#fff; font-size:16px; }
+    button:hover { filter: brightness(0.95); }
+    small { color:#666; }
   </style>
 </head>
 <body>
   <h1>Biobolt tartalomgenerátor</h1>
-  <form method="post" action="https://automation.kmynd.com/webhook-test/newsletter-blog">
-    
+  <p class="hint"><small>Az űrlap a beállított n8n webhookra küld: <code>POST https://automation.kmynd.com/webhook-test/newsletter-blog</code></small></p>
+
+  <form method="post" action="https://automation.kmynd.com/webhook-test/newsletter-blog" autocomplete="off">
     <label>Nyelv</label>
-    <input type="text" name="language" value="magyar">
+    <input type="text" name="language" value="magyar" required>
 
     <label>Téma</label>
-    <input type="text" name="topic" placeholder="pl. immunerősítés">
+    <input type="text" name="topic" placeholder="pl. immunerősítés" required>
 
-    <label>Célközönség</label>
-    <input type="text" name="audience" placeholder="pl. biobolt vásárlók">
+    <div class="row">
+      <div>
+        <label>Célközönség</label>
+        <input type="text" name="audience" placeholder="pl. biobolt vásárlók">
+      </div>
+      <div>
+        <label>Hangnem</label>
+        <input type="text" name="tone" value="barátságos, bizalomépítő">
+      </div>
+    </div>
 
-    <label>Hangnem</label>
-    <input type="text" name="tone" value="barátságos, bizalomépítő">
-
-    <label>Stílus</label>
-    <input type="text" name="style" value="informativ, rövid bekezdések">
+    <div class="row">
+      <div>
+        <label>Stílus</label>
+        <input type="text" name="style" value="informatív, rövid bekezdések">
+      </div>
+      <div>
+        <label>Kulcsszavak</label>
+        <input type="text" name="keywords" value="immunerősítés, természetes vitaminok, bio bolt">
+      </div>
+    </div>
 
     <label>Márkahang</label>
     <textarea name="brand">Természetes összetevők, bizalom, egészségtudatosság</textarea>
-
-    <label>Kulcsszavak</label>
-    <input type="text" name="keywords" value="immunerősítés, természetes vitaminok, bio bolt">
 
     <label>CTA</label>
     <input type="text" name="cta" value="Próbáld ki természetes immunerősítőinket most!">
 
     <label>Megjegyzések</label>
-    <textarea name="notes"></textarea>
+    <textarea name="notes" placeholder="extra instrukciók, linkek, korlátok"></textarea>
 
-    <label>Kreativitás (temperature
+    <label>Kreativitás (temperature 0–1)</label>
+    <input type="number" name="temperature" min="0" max="1" step="0.1" value="0.7">
+
+    <button type="submit">Generálás</button>
+  </form>
+</body>
+</html>
