@@ -68,28 +68,29 @@
   <div id="result"></div>
 
   <script>
-    const form = document.getElementById("newsletterForm");
-    form.addEventListener("submit", async (e) => {
-      e.preventDefault();
-      const resultDiv = document.getElementById("result");
-      resultDiv.textContent = "⏳ Generálás folyamatban...";
+  const form = document.getElementById("newsletterForm");
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const resultDiv = document.getElementById("result");
+    resultDiv.textContent = "⏳ Generálás folyamatban...";
 
-      const formData = new FormData(form);
-      const payload = {};
-      formData.forEach((v, k) => payload[k] = v);
+    // form-urlencoded payload (preflight nélkül)
+    const payload = new URLSearchParams(new FormData(form));
 
-      try {
-        const res = await fetch("https://automation.kmynd.com/webhook-test/newsletter-blog", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(payload),
-        });
-        const text = await res.text();
-        resultDiv.textContent = text;
-      } catch (err) {
-        resultDiv.textContent = "❌ Hiba történt: " + err.message;
-      }
-    });
-  </script>
+    try {
+      const res = await fetch("https://automation.kmynd.com/webhook-test/newsletter-blog", {
+        method: "POST",
+        body: payload,                 // NINCS headers: Content-Type
+        // mode: "cors" alapból elég; ne tedd "no-cors"-ra, mert nem olvashatod ki a választ
+      });
+
+      const text = await res.text();
+      resultDiv.textContent = text;
+    } catch (err) {
+      resultDiv.textContent = "❌ Hiba történt: " + err.message;
+    }
+  });
+</script>
+
 </body>
 </html>
