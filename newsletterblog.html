@@ -19,7 +19,7 @@
 </head>
 <body>
   <h1>Biobolt tartalomgenerátor</h1>
-  <p class="hint"><small>Az űrlap a beállított n8n webhookra küld: <code>POST https://automation.kmynd.com/webhook/newsletter-blog</code></small></p>
+  <p class="hint"><small>Az űrlap a beállított n8n webhookra küld: <code></code></small></p>
 
   <form id="newsletterForm" autocomplete="off">
     <label>Nyelv</label>
@@ -78,7 +78,7 @@
     const payload = new URLSearchParams(new FormData(form));
 
     try {
-      const res = await fetch("https://automation.kmynd.com/webhook-test/newsletter-blog", {
+      const res = await fetch("https://automation.kmynd.com/webhook/newsletter-blog", {
         method: "POST",
         body: payload,                 // NINCS headers: Content-Type
         // mode: "cors" alapból elég; ne tedd "no-cors"-ra, mert nem olvashatod ki a választ
