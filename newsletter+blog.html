@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="hu">
+<head>
+  <meta charset="utf-8" />
+  <title>Biobolt hírlevél + blog generátor</title>
+  <style>
+    body {
+      font: 16px/1.5 system-ui, sans-serif;
+      max-width: 800px;
+      margin: 40px auto;
+      padding: 0 16px;
+      background: #f9f9f9;
+    }
+    h1 {
+      color: #2c3e50;
+    }
+    label {
+      display:block;
+      margin-top:14px;
+      font-weight:600;
+    }
+    input, textarea, select {
+      width:100%;
+      padding:10px;
+      border:1px solid #ccc;
+      border-radius:6px;
+      margin-top:4px;
+    }
+    textarea { min-height:100px; }
+    button {
+      margin-top:20px;
+      padding:12px 20px;
+      border:0;
+      border-radius:6px;
+      background:#28a745;
+      color:white;
+      font-size:16px;
+      cursor:pointer;
+    }
+    button:hover { background:#218838; }
+  </style>
+</head>
+<body>
+  <h1>Biobolt tartalomgenerátor</h1>
+  <form method="post" action="https://automation.kmynd.com/webhook-test/newsletter-blog">
+    
+    <label>Nyelv</label>
+    <input type="text" name="language" value="magyar">
+
+    <label>Téma</label>
+    <input type="text" name="topic" placeholder="pl. immunerősítés">
+
+    <label>Célközönség</label>
+    <input type="text" name="audience" placeholder="pl. biobolt vásárlók">
+
+    <label>Hangnem</label>
+    <input type="text" name="tone" value="barátságos, bizalomépítő">
+
+    <label>Stílus</label>
+    <input type="text" name="style" value="informativ, rövid bekezdések">
+
+    <label>Márkahang</label>
+    <textarea name="brand">Természetes összetevők, bizalom, egészségtudatosság</textarea>
+
+    <label>Kulcsszavak</label>
+    <input type="text" name="keywords" value="immunerősítés, természetes vitaminok, bio bolt">
+
+    <label>CTA</label>
+    <input type="text" name="cta" value="Próbáld ki természetes immunerősítőinket most!">
+
+    <label>Megjegyzések</label>
+    <textarea name="notes"></textarea>
+
+    <label>Kreativitás (temperature
