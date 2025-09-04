@@ -4,93 +4,269 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Biobolt hírlevél + blog generátor</title>
+
+  <!-- Modern, jól olvasható font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
   <style>
-    body { font:16px/1.5 system-ui, sans-serif; max-width:820px; margin:40px auto; padding:0 16px; background:#fafafa; }
-    h1 { margin-bottom:8px; }
-    p.hint { color:#555; margin-top:0; }
-    label { display:block; margin-top:14px; font-weight:600; }
-    input, textarea, select { width:100%; padding:10px; border:1px solid #ccc; border-radius:8px; margin-top:6px; background:#fff; }
-    textarea { min-height:110px; }
-    .row { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
-    button { margin-top:20px; padding:12px 18px; border:0; border-radius:10px; cursor:pointer; background:#2f855a; color:#fff; font-size:16px; }
-    button:hover { filter:brightness(0.95); }
-    #result { margin-top:30px; padding:20px; border:1px solid #ccc; border-radius:8px; background:#fff; white-space:pre-wrap; font-family:monospace; max-height:500px; overflow-y:auto; }
+    :root{
+      --bg-900:#0b0f12;   /* fő háttér (nagyon sötét) */
+      --bg-800:#11161a;   /* kártyák / inputok */
+      --bg-700:#151b21;   /* lebegő/kiemelt felületek */
+      --line:#26313a;     /* határvonal */
+      --text:#e6edf3;     /* elsődleges szöveg */
+      --muted:#96a1ab;    /* segédszöveg */
+      --accent:#22d3ee;   /* cián akcentus */
+      --accent-weak: rgba(34,211,238,.18);
+      --shadow: 0 10px 20px rgba(0,0,0,.45), 0 2px 6px rgba(0,0,0,.35);
+      --radius: 14px;
+      --radius-sm: 10px;
+      --focus: 0 0 0 3px rgba(34,211,238,.35), 0 0 25px rgba(34,211,238,.12) inset;
+    }
+
+    /* Alap, „carbon” jellegű sötét háttér finom mintával */
+    html,body{height:100%}
+    body {
+      font: 16px/1.55 "Inter", system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+      color: var(--text);
+      background:
+        radial-gradient(1200px 600px at 10% -10%, rgba(34,211,238,.06), transparent 45%),
+        radial-gradient(900px 500px at 110% 10%, rgba(34,211,238,.05), transparent 40%),
+        linear-gradient(180deg, #0b0f12, #0b0f12);
+      margin: 0;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    .wrap {
+      max-width: 920px;
+      padding: 32px 20px 60px;
+      margin: 0 auto;
+    }
+
+    .card {
+      background: linear-gradient(180deg, var(--bg-800), var(--bg-700));
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 26px;
+    }
+
+    h1 {
+      margin: 0 0 8px 0;
+      font-size: clamp(22px, 3.2vw, 30px);
+      letter-spacing: .2px;
+    }
+    p.hint { color: var(--muted); margin: 0 0 18px 0; }
+
+    label {
+      display:block;
+      margin-top: 14px;
+      font-weight: 600;
+      color: #d9e2ea;
+      letter-spacing: .2px;
+    }
+
+    input, textarea, select {
+      width: 100%;
+      padding: 12px 12px;
+      margin-top: 8px;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--line);
+      background: #0f1418;
+      color: var(--text);
+      outline: none;
+      transition: border-color .2s ease, box-shadow .2s ease, background .2s ease, transform .08s ease;
+    }
+    input::placeholder, textarea::placeholder { color: #7f8b96; }
+
+    input:focus, textarea:focus, select:focus {
+      border-color: var(--accent);
+      box-shadow: var(--focus);
+      background: #0e1317;
+    }
+
+    .row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+
+    /* Generálás gomb – lebegés és cián árnyék */
+    .actions { margin-top: 22px; }
+    button {
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
+      padding: 12px 18px;
+      border: 0;
+      border-radius: 12px;
+      cursor: pointer;
+      background: linear-gradient(180deg, #0fd5ef, #0cbdd4);
+      color: #002b33;
+      font-size: 16px;
+      font-weight: 700;
+      letter-spacing: .3px;
+      box-shadow:
+        0 8px 18px rgba(34,211,238,.35),
+        0 2px 6px rgba(0,0,0,.45);
+      transform: translateY(0);
+      transition: transform .18s cubic-bezier(.2,.8,.2,1), box-shadow .18s ease, filter .2s ease, opacity .2s ease;
+      will-change: transform, box-shadow;
+    }
+    button:hover {
+      transform: translateY(-2px);
+      box-shadow:
+        0 16px 28px rgba(34,211,238,.45),
+        0 6px 14px rgba(0,0,0,.55);
+      filter: brightness(1.02);
+    }
+    button:active {
+      transform: translateY(0);
+      box-shadow:
+        0 8px 18px rgba(34,211,238,.35),
+        0 2px 6px rgba(0,0,0,.55) inset;
+    }
+
+    /* Kódblokk/eredmény */
+    #result {
+      margin-top: 22px;
+      padding: 18px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius-sm);
+      background:
+        linear-gradient(180deg, #0b1014, #0c1014);
+      white-space: pre-wrap;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      font-size: 14px;
+      color: #d4e4ea;
+      max-height: 520px;
+      overflow-y: auto;
+      box-shadow: 0 0 0 1px rgba(34,211,238,.05) inset;
+    }
+
+    /* Felső cím és kártya elrendezés */
+    .header {
+      margin-bottom: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+    .badge {
+      display:inline-block;
+      font-size:12px;
+      color:#7fdfee;
+      background: var(--accent-weak);
+      border:1px solid rgba(34,211,238,.35);
+      padding: 6px 10px;
+      border-radius: 999px;
+    }
+
+    /* Kisebb képernyők */
+    @media (max-width: 720px){
+      .row { grid-template-columns: 1fr; }
+      .card { padding: 20px; }
+    }
+
+    /* Mozgáscsökkentés támogatás */
+    @media (prefers-reduced-motion: reduce){
+      * { transition: none !important; }
+    }
   </style>
 </head>
 <body>
-  <h1>Biobolt tartalomgenerátor</h1>
-  <p class="hint"><small>Az űrlap a beállított n8n webhookra küld: <code></code></small></p>
-
-  <form id="newsletterForm" autocomplete="off">
-    <label>Nyelv</label>
-    <input type="text" name="language" placeholder="pl. magyar, angol" required>
-
-    <label>Téma</label>
-    <input type="text" name="topic" placeholder="pl. immunerősítés" required>
-
-    <div class="row">
-      <div>
-        <label>Célközönség</label>
-        <input type="text" name="audience" placeholder="pl. biobolt vásárlók, KKV marketingesek">
-      </div>
-      <div>
-        <label>Hangnem</label>
-        <input type="text" name="tone" placeholder="pl. barátságos, bizalomépítő, szakértői">
-      </div>
+  <div class="wrap">
+    <div class="header">
+      <h1>Biobolt tartalomgenerátor</h1>
+      <span class="badge">Sötét mód · cián akcentus</span>
     </div>
 
-    <div class="row">
-      <div>
-        <label>Stílus</label>
-        <input type="text" name="style" placeholder="pl. informatív, rövid bekezdések, felsorolások">
-      </div>
-      <div>
-        <label>Kulcsszavak</label>
-        <input type="text" name="keywords" placeholder="pl. immunerősítés, természetes vitaminok, bio bolt">
-      </div>
+    <div class="card">
+      <p class="hint"><small>Az űrlap a beállított n8n webhookra küld: <code>POST form-urlencoded</code></small></p>
+
+      <form id="newsletterForm" autocomplete="off">
+        <label>Nyelv</label>
+        <input type="text" name="language" placeholder="pl. magyar, angol" required>
+
+        <label>Téma</label>
+        <input type="text" name="topic" placeholder="pl. immunerősítés" required>
+
+        <div class="row">
+          <div>
+            <label>Célközönség</label>
+            <input type="text" name="audience" placeholder="pl. biobolt vásárlók, KKV marketingesek">
+          </div>
+          <div>
+            <label>Hangnem</label>
+            <input type="text" name="tone" placeholder="pl. barátságos, bizalomépítő, szakértői">
+          </div>
+        </div>
+
+        <div class="row">
+          <div>
+            <label>Stílus</label>
+            <input type="text" name="style" placeholder="pl. informatív, rövid bekezdések, felsorolások">
+          </div>
+          <div>
+            <label>Kulcsszavak</label>
+            <input type="text" name="keywords" placeholder="pl. immunerősítés, természetes vitaminok, bio bolt">
+          </div>
+        </div>
+
+        <label>Márkahang</label>
+        <textarea name="brand" placeholder="pl. Természetes összetevők, bizalom, egészségtudatosság"></textarea>
+
+        <label>CTA</label>
+        <input type="text" name="cta" placeholder="pl. Próbáld ki természetes immunerősítőinket most!">
+
+        <label>Megjegyzések</label>
+        <textarea name="notes" placeholder="extra instrukciók, linkek, korlátok"></textarea>
+
+        <label>Kreativitás (temperature 0–1)</label>
+        <input type="number" name="temperature" min="0" max="1" step="0.1" placeholder="0.7 (ajánlott)">
+
+        <div class="actions">
+          <button type="submit" id="generateBtn">⚡ Generálás</button>
+        </div>
+      </form>
+
+      <div id="result" aria-live="polite"></div>
     </div>
-
-    <label>Márkahang</label>
-    <textarea name="brand" placeholder="pl. Természetes összetevők, bizalom, egészségtudatosság"></textarea>
-
-    <label>CTA</label>
-    <input type="text" name="cta" placeholder="pl. Próbáld ki természetes immunerősítőinket most!">
-
-    <label>Megjegyzések</label>
-    <textarea name="notes" placeholder="extra instrukciók, linkek, korlátok"></textarea>
-
-    <label>Kreativitás (temperature 0–1)</label>
-    <input type="number" name="temperature" min="0" max="1" step="0.1" placeholder="0.7 (ajánlott)">
-
-    <button type="submit">Generálás</button>
-  </form>
-
-  <div id="result"></div>
+  </div>
 
   <script>
-  const form = document.getElementById("newsletterForm");
-  form.addEventListener("submit", async (e) => {
-    e.preventDefault();
+    const form = document.getElementById("newsletterForm");
     const resultDiv = document.getElementById("result");
-    resultDiv.textContent = "⏳ Generálás folyamatban...";
+    const btn = document.getElementById("generateBtn");
 
-    // form-urlencoded payload (preflight nélkül)
-    const payload = new URLSearchParams(new FormData(form));
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      resultDiv.textContent = "⏳ Generálás folyamatban...";
+      btn.disabled = true;
+      btn.style.opacity = ".8";
 
-    try {
-      const res = await fetch("https://automation.kmynd.com/webhook/newsletter-blog", {
-        method: "POST",
-        body: payload,                 // NINCS headers: Content-Type
-        // mode: "cors" alapból elég; ne tedd "no-cors"-ra, mert nem olvashatod ki a választ
-      });
+      // form-urlencoded payload (preflight nélkül)
+      const payload = new URLSearchParams(new FormData(form));
 
-      const text = await res.text();
-      resultDiv.textContent = text;
-    } catch (err) {
-      resultDiv.textContent = "❌ Hiba történt: " + err.message;
-    }
-  });
-</script>
+      try {
+        const res = await fetch("https://automation.kmynd.com/webhook/newsletter-blog", {
+          method: "POST",
+          body: payload, // NINCS Content-Type header – a böngésző állítja
+          // mode: "cors" az alap; ne tedd "no-cors"-ra, különben nem olvasható a válasz
+        });
 
+        const text = await res.text();
+        resultDiv.textContent = text;
+      } catch (err) {
+        resultDiv.textContent = "❌ Hiba történt: " + err.message;
+      } finally {
+        btn.disabled = false;
+        btn.style.opacity = "1";
+      }
+    });
+  </script>
 </body>
 </html>
