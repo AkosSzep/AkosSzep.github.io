@@ -30,16 +30,8 @@
     html,body{height:100%}
     body {
   font: 16px/1.55 "Inter", system-ui, sans-serif;
-  color: #e8f2f4;
-  background-color: #2a2f34; /* sötét szürke háttér */
-  background-image: repeating-linear-gradient(
-    45deg,
-    rgba(0, 240, 255, 0.12),  /* telítettebb cián csík */
-    rgba(0, 240, 255, 0.12) 20px,
-    transparent 20px,
-    transparent 40px
-  );
-  background-attachment: fixed;
+  color: #1a1a1a;
+  background-color: #ffffff; /* fehér oldal háttér */
 }
 
     .wrap {
@@ -49,12 +41,13 @@
     }
 
     .card {
-      background: linear-gradient(180deg, var(--bg-800), var(--bg-700));
-      border: 1px solid var(--line);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      padding: 26px;
-    }
+  background: #2a2f34; /* sötét szürke panel */
+  border: 1px solid #444; 
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 26px;
+  color: #e6edf3; /* világos szöveg, hogy olvasható legyen */
+}
 
     h1 {
       margin: 0 0 8px 0;
